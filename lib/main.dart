@@ -8,6 +8,7 @@ import 'package:coffeeapp/module/ProductScreen/cubit/products_screen_cubit.dart'
 import 'package:coffeeapp/module/ProductScreen/productsScreen.dart';
 import 'package:coffeeapp/module/ProfileScreen/cubit/profile_screen_cubit.dart';
 import 'package:coffeeapp/module/SignupScreen/cubit/cubit.dart';
+import 'package:coffeeapp/module/orderhistoryscreen/cubit/order_history_cubit.dart';
 import 'package:coffeeapp/module/orderhistoryscreen/orderhisoryscreen.dart';
 import 'package:coffeeapp/module/paymentScreen/cubit/payment_method_cubit.dart';
 import 'package:coffeeapp/module/paymentScreen/paymentmethodscreen.dart';
@@ -65,6 +66,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context)=> ProductInfoCubit()),
         BlocProvider(create: (context)=> ProfileSettingCubit()),
         BlocProvider(create: (context)=> PaymentMethodCubit()),
+        BlocProvider(create: (context)=> OrderHistoryCubit()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
