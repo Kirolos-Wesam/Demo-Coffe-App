@@ -1,20 +1,18 @@
 
+import 'package:coffeeapp/shared/componets/componets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-Color mainColor = Color(13007950);
-Color TextColor = Color(3091756);
+
+
 
 ThemeData light = ThemeData(
   primarySwatch: Colors.brown,
   scaffoldBackgroundColor: Colors.white,
   appBarTheme: AppBarTheme(
       titleSpacing: 20.0,
-      systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.white,
-          statusBarIconBrightness: Brightness.dark
-      ),
+      systemOverlayStyle: SystemUiOverlayStyle( ),
       backgroundColor: Colors.white,
       elevation: 0.0,
       titleTextStyle: TextStyle(
@@ -28,11 +26,12 @@ ThemeData light = ThemeData(
   ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
-      selectedItemColor: Colors.brown[400],
+      selectedItemColor: Color.fromARGB(255, 198, 124, 78),
       unselectedItemColor: Colors.grey,
       elevation: 20.0,
       backgroundColor: Colors.white,
   ),
+  
   textTheme: TextTheme(
       bodyText1: TextStyle(
           fontSize: 18.0,
@@ -45,7 +44,7 @@ ThemeData light = ThemeData(
       color: Colors.black,
       height: 1.3,)
   ),
-  fontFamily: 'Jannah',
+  fontFamily: 'Poppins',
 );
 ThemeData darkTheme = ThemeData(
   primarySwatch: Colors.blue,

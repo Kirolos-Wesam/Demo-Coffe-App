@@ -5,8 +5,16 @@ import 'package:coffeeapp/module/LoginScreen/cubit/cubit.dart';
 import 'package:coffeeapp/module/LoginScreen/loginscreen.dart';
 import 'package:coffeeapp/module/OrderScreen/cubit/order_screen_cubit.dart';
 import 'package:coffeeapp/module/ProductScreen/cubit/products_screen_cubit.dart';
+import 'package:coffeeapp/module/ProductScreen/productsScreen.dart';
 import 'package:coffeeapp/module/ProfileScreen/cubit/profile_screen_cubit.dart';
 import 'package:coffeeapp/module/SignupScreen/cubit/cubit.dart';
+import 'package:coffeeapp/module/orderhistoryscreen/orderhisoryscreen.dart';
+import 'package:coffeeapp/module/paymentScreen/cubit/payment_method_cubit.dart';
+import 'package:coffeeapp/module/paymentScreen/paymentmethodscreen.dart';
+import 'package:coffeeapp/module/productInfoScreen/cubit/product_info_cubit.dart';
+import 'package:coffeeapp/module/productInfoScreen/productinfoscreen.dart';
+import 'package:coffeeapp/module/profilesettingScreen/cubit/profile_setting_cubit.dart';
+import 'package:coffeeapp/module/profilesettingScreen/profilesettingscreen.dart';
 import 'package:coffeeapp/shared/componets/constants.dart';
 import 'package:coffeeapp/shared/network/local/cachehelper.dart';
 import 'package:coffeeapp/shared/styles/theme.dart';
@@ -49,17 +57,20 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => LoginCubit()),
         BlocProvider(create: (context)=> SignupCubit()),
-        BlocProvider(create: (context)=> HomeCubit()),
+        BlocProvider(create: (context)=> HomeCubit()..getProfile()),
         BlocProvider(create: (context)=> ProductsCubit()..getImage()..getProducts()),
-        BlocProvider(create: (context)=> FavoriteCubit()),
-        BlocProvider(create: (context)=> OrderCubit()),
+        BlocProvider(create: (context)=> FavoriteCubit()..getFavorites()),
+        BlocProvider(create: (context)=> OrderCubit()..getOrders(context)),
         BlocProvider(create: (context)=> ProfileCubit()),
+        BlocProvider(create: (context)=> ProductInfoCubit()),
+        BlocProvider(create: (context)=> ProfileSettingCubit()),
+        BlocProvider(create: (context)=> PaymentMethodCubit()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: light,
-        home: HomeScreen(),
+        home: OrderHistoryScreen()
       ),
     );
   }

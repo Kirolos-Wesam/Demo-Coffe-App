@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:coffeeapp/model/productmodel.dart';
 import 'package:coffeeapp/model/usermodel.dart';
@@ -47,13 +49,16 @@ class ProductsCubit extends Cubit<ProductsState> {
     });
   }
 
-  List<ProductModel>? products;
+  List<ProductModel> products =[];
   getProducts(){
     emit(GetProductsLoadingState());
 
     FirebaseFirestore.instance.collection('products').get().then((value) {
       products = ProductModelFromJson(value.docs);
+      print(products);
       emit(GetProductsSuccessState());
     }).onError((error, stackTrace) {emit(GetProductsErrorState());});
   }
+
+  
 }

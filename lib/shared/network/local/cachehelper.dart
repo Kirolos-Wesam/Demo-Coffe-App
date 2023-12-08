@@ -1,3 +1,4 @@
+import 'package:coffeeapp/model/ordermodel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheHelper{
@@ -28,6 +29,23 @@ class CacheHelper{
 
     return await sharedPreferences.setDouble(key, value);
   }
+
+//  static Future<void> saveListToSharedPreferences({required String key ,required List<OrderModel> dataList}) async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   List<String> jsonList = dataList.map((model) => model.toJson()).toList();
+//   prefs.setStringList(key, jsonList);
+// }
+
+// static Future<List<OrderModel>> getListFromSharedPreferences({required String key}) async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   List<String>? jsonList = prefs.getStringList(key);
+//   if (jsonList == null) {
+//     return [];
+//   }
+
+//   List<OrderModel> modelList = jsonList.map((json) => OrderModel.FromJson(json)).toList();
+//   return modelList;
+// }
 
   static Future<bool> removeData({
     required String key

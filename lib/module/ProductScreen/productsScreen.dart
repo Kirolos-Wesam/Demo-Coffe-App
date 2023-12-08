@@ -1,9 +1,14 @@
 // ignore_for_file: sized_box_for_whitespace
 
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:coffeeapp/model/productmodel.dart';
+import 'package:coffeeapp/module/OrderScreen/cubit/order_screen_cubit.dart';
 import 'package:coffeeapp/module/ProductScreen/cubit/products_screen_cubit.dart';
+import 'package:coffeeapp/module/productInfoScreen/cubit/product_info_cubit.dart';
+import 'package:coffeeapp/module/productInfoScreen/productinfoscreen.dart';
 import 'package:coffeeapp/shared/componets/componets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,14 +26,12 @@ class ProductScreen extends StatelessWidget {
       },
       builder: (context, state) {
         var cubit = ProductsCubit.get(context);
-        List<ProductModel> fillterdProduct = cubit.products!.where((element) {
-          if(cubit.currentIndex == 0){
+        List<ProductModel> fillterdProduct = cubit.products.where((element) {
+          if (cubit.currentIndex == 0) {
             return element.categoryId == 1;
-          }
-          else if(cubit.currentIndex == 1){
-             return element.categoryId == 2; 
-          }
-          else{
+          } else if (cubit.currentIndex == 1) {
+            return element.categoryId == 2;
+          } else {
             return element.categoryId == 3;
           }
         }).toList();
@@ -46,9 +49,9 @@ class ProductScreen extends StatelessWidget {
                       child: Container(
                         height: 370,
                         width: double.infinity,
-                        padding: EdgeInsetsDirectional.symmetric(vertical: 30),
+                        padding: const EdgeInsetsDirectional.symmetric(vertical: 30),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
+                            borderRadius: const BorderRadius.only(
                                 bottomLeft: Radius.circular(60),
                                 bottomRight: Radius.circular(60)),
                             color: Colors.grey[900]),
@@ -63,25 +66,25 @@ class ProductScreen extends StatelessWidget {
                                   children: [
                                     IconButton(
                                         onPressed: () {},
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.notifications_none,
                                           color: Colors.white,
                                         )),
-                                    Text(
+                                    const Text(
                                       'Kirolos Wesam',
                                       style: TextStyle(color: Colors.white),
                                     ),
-                                    CircleAvatar(
+                                    const CircleAvatar(
                                       radius: 25,
                                       backgroundColor: Colors.orange,
                                     )
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 20,
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text(
                                     'Good Moring, Kirolos',
                                     style: TextStyle(
@@ -90,13 +93,13 @@ class ProductScreen extends StatelessWidget {
                                         fontFamily: 'Poppins'),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 20,
                                 ),
                                 Container(
                                   width: double.infinity,
                                   height: 50,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(17)),
                                       color: Colors.white),
@@ -107,19 +110,19 @@ class ProductScreen extends StatelessWidget {
                                     },
                                     decoration: InputDecoration(
                                       hintText: 'Search Coffee..',
-                                      contentPadding: EdgeInsets.all(8),
+                                      contentPadding: const EdgeInsets.all(8),
                                       border: InputBorder.none,
-                                      prefixIcon: Icon(Icons.search),
+                                      prefixIcon: const Icon(Icons.search),
                                       suffixIcon: IconButton(
                                           onPressed: () {},
                                           icon: Icon(
                                             Icons.keyboard_control,
-                                            color: Colors.brown,
+                                            color: mainColor,
                                           )),
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Padding(
@@ -148,7 +151,7 @@ class ProductScreen extends StatelessWidget {
                                           Container(
                                         width: double.infinity,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.all(
+                                            borderRadius: const BorderRadius.all(
                                                 Radius.circular(30)),
                                             image: DecorationImage(
                                               image: imageProvider,
@@ -163,8 +166,8 @@ class ProductScreen extends StatelessWidget {
                                 viewportFraction: 1.0,
                                 reverse: false,
                                 autoPlay: true,
-                                autoPlayInterval: Duration(seconds: 3),
-                                autoPlayAnimationDuration: Duration(seconds: 3),
+                                autoPlayInterval: const Duration(seconds: 3),
+                                autoPlayAnimationDuration: const Duration(seconds: 3),
                                 autoPlayCurve: Curves.fastOutSlowIn,
                                 scrollDirection: Axis.horizontal),
                           ),
@@ -180,7 +183,7 @@ class ProductScreen extends StatelessWidget {
                   children: [
                     defaultText(
                         text: 'Categories', color: Colors.black, fontSize: 18),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     SizedBox(
@@ -194,124 +197,71 @@ class ProductScreen extends StatelessWidget {
                                 onPressed: () {
                                   cubit.switchButton(0);
                                 },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: cubit.currentIndex == 0
+                                        ? mainColor
+                                        : Colors.white),
                                 child: defaultText(
                                   text: 'Cappuccino',
-                                  color: cubit.currentIndex == 0 ? Colors.white : Colors.black,
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: cubit.currentIndex == 0 ? Colors.brown[400] : Colors.white)),
-                            SizedBox(
+                                  color: cubit.currentIndex == 0
+                                      ? Colors.white
+                                      : Colors.black,
+                                )),
+                            const SizedBox(
                               width: 10,
                             ),
                             ElevatedButton(
                                 onPressed: () {
                                   cubit.switchButton(1);
                                 },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: cubit.currentIndex == 1
+                                        ? mainColor
+                                        : Colors.white),
                                 child: defaultText(
                                   text: 'Cold Brew',
-                                  color: cubit.currentIndex == 1 ? Colors.white : Colors.black,
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: cubit.currentIndex == 1 ? Colors.brown[400] : Colors.white)),
-                            SizedBox(
+                                  color: cubit.currentIndex == 1
+                                      ? Colors.white
+                                      : Colors.black,
+                                )),
+                            const SizedBox(
                               width: 10,
                             ),
                             ElevatedButton(
                                 onPressed: () {
                                   cubit.switchButton(2);
                                 },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: cubit.currentIndex == 2
+                                        ? mainColor
+                                        : Colors.white),
                                 child: defaultText(
                                   text: 'espresso',
-                                  color: cubit.currentIndex == 2 ? Colors.white : Colors.black,
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: cubit.currentIndex == 2 ? Colors.brown[400] : Colors.white)),
+                                  color: cubit.currentIndex == 2
+                                      ? Colors.white
+                                      : Colors.black,
+                                )),
                           ],
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15, right: 15),
-                      child: GridView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: 6,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 15,
-                                  mainAxisSpacing: 12,
-                                  childAspectRatio: .76),
-                          itemBuilder: (context, index) => Card(
-                            elevation: 8,
-                            child: Container(
-                              width: 120,
-                              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Colors.white),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      height: 105,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(15)),
-                                          color: Colors.orange),
-                                    ),
-                                    Spacer(),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            defaultText(
-                                                text: 'Cappuccino',
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight:
-                                                    FontWeight.bold),
-                                            defaultText(
-                                                text: 'with low far drink',
-                                                color: Colors.black,
-                                                fontSize: 10,
-                                                fontWeight:
-                                                    FontWeight.bold),
-                                            SizedBox(
-                                              height: 6,
-                                            ),
-                                            defaultText(
-                                                text: '100 EGP',
-                                                color: Colors.black,
-                                                fontSize: 13,
-                                                fontWeight:
-                                                    FontWeight.bold),
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 10),
-                                          child: CircleAvatar(
-                                            radius: 15,
-                                            backgroundColor:
-                                                Colors.brown[400],
-                                            child: Icon(Icons.add,
-                                                color: Colors.white),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )),
+                    if(fillterdProduct.isEmpty)
+                    const Padding(
+                      padding: EdgeInsets.only(top: 100),
+                      child: Center(child: CircularProgressIndicator()),
                     )
+                    else
+                    Padding(
+                        padding: const EdgeInsets.only(left: 15, right: 15),
+                        child: GridView.count(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 9,
+                          mainAxisSpacing: 14,
+                          childAspectRatio: .79,
+                          children: List.generate(fillterdProduct.length, (index) => products(fillterdProduct,index, context)),
+                        ))
                   ],
                 ),
               )
@@ -321,4 +271,90 @@ class ProductScreen extends StatelessWidget {
       },
     );
   }
+
+  Widget products(List<ProductModel> products, index, context) => Card(
+        elevation: 8,
+        child: Container(
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+              color: Colors.white),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  height: 105,
+                  child: InkWell(
+                    onTap: (){
+                      ProductInfoCubit.get(context).checkFavorite(id: products[index].id!);
+                      navigateTo(context, ProductInfo(productId: products[index].id! , coffeeName: products[index].name!, title: products[index].title!, description: products[index].description!, categoryId: products[index].categoryId!, image: products[index].profileImage!, price: products[index].price!, rate: 4.6, showOrder: true,));
+                    },
+                    child: CachedNetworkImage(imageUrl: products[index].profileImage!, imageBuilder: (context, imageProvider){
+                      return Container(
+                        decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(15)), image: DecorationImage(image: imageProvider, fit: BoxFit.cover)),
+                      );
+                    }),
+                  ),
+                ),
+                const Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: (){
+                          ProductInfoCubit.get(context).checkFavorite(id: products[index].id!);
+                          navigateTo(context, ProductInfo(productId: products[index].id! , coffeeName: products[index].name!, title: products[index].title!, description: products[index].description!, categoryId: products[index].categoryId!, image: products[index].profileImage!, price: products[index].price!, rate: 4.6, showOrder: true,));
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            defaultText(
+                                text: products[index].name!,
+                                color: Colors.black,
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold),
+                            defaultText(
+                                text: products[index].title!,
+                                color: Colors.black,
+                                fontSize: 9,
+                                fontWeight: FontWeight.bold),
+                            const SizedBox(
+                              height: 6,
+                            ),
+                            defaultText(
+                                text: '${products[index].price.toString()} EGP',
+                                color: Colors.black,
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: InkWell(
+                        onTap: (){
+                         //ProductInfoCubit.get(context).addOrder(productId: products[index].id!, productName: products[index].name!, productTitle: products[index].title!, productImage: products[index].profileImage!, productSize: 1, checkOut: false, price: products[index].price!, productCount: 1);
+                         ProductInfoCubit.get(context).addOrder(productId: products[index].id!);
+                         OrderCubit.get(context).getOrders(context);
+                         
+                        },
+                        child: CircleAvatar(
+                          radius: 15,
+                          backgroundColor: mainColor,
+                          child: const Icon(Icons.add, color: Colors.white),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                
+              ],
+            ),
+          ),
+        ),
+      );
 }

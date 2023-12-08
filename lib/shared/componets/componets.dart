@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 void navigateTo(context, widget) =>
@@ -7,6 +8,9 @@ void navigateTo(context, widget) =>
 
 void navigateAndfinish(context, widget) => Navigator.pushAndRemoveUntil(
     context, MaterialPageRoute(builder: (context) => widget), (route) => false);
+
+
+  Color mainColor = Color.fromARGB(255, 198, 124, 78);
 
 Widget defaultFormField({
   required TextEditingController controller,
@@ -114,6 +118,8 @@ Widget defaultText(
          FontWeight? fontWeight}) =>
     Text(
       text,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
           color: color,
           fontSize: fontSize,
@@ -138,6 +144,40 @@ Color chooseToastColor(ToastStates state) {
       break;
   }
   return color;
+}
+class CardNumberFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    // Remove any non-digit characters
+    String newText = newValue.text.replaceAll(RegExp(r'\D'), '');
+
+    // Add space every four digits
+    if (newText.length > 4) {
+      newText = newText.substring(0, 4) +
+          ' ' +
+          newText.substring(4, newText.length);
+    }
+    if (newText.length > 9) {
+      newText = newText.substring(0, 9) +
+          ' ' +
+          newText.substring(9, newText.length);
+    }
+    if (newText.length > 14) {
+      newText = newText.substring(0, 14) +
+          ' ' +
+          newText.substring(14, newText.length);
+    }
+
+    return newValue.copyWith(
+      text: newText,
+      selection: TextSelection.fromPosition(
+        TextPosition(offset: newText.length),
+      ),
+    );
+  }
 }
 
 // CarouselSlider(
