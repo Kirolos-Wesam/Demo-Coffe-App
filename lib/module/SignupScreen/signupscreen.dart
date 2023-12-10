@@ -19,8 +19,12 @@ class SignupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cubit = SignupCubit.get(context);
     return BlocConsumer<SignupCubit, SignupState>(
       listener: (context, state) {
+        if(state is SignupErrorState){
+          showToast(text: 'The email address is already existed', state: ToastStates.ERROR);
+        }
         if (state is CreateUserSuccessState) {
           CacheHelper.saveData(key: 'uID', value: state.uID).then((value) {
             uID = state.uID;
@@ -118,7 +122,7 @@ class SignupScreen extends StatelessWidget {
                         type: TextInputType.streetAddress,
                         validate: (value) {
                           if (value!.isEmpty) {
-                            return 'Please Enter Your Name';
+                            return 'Please Enter Your Address';
                           }
                         }),
                     const SizedBox(
@@ -133,12 +137,19 @@ class SignupScreen extends StatelessWidget {
                     ),
                     defaultFormField(
                         controller: passwordController,
+
                         type: TextInputType.streetAddress,
                         validate: (value) {
                           if (value!.isEmpty) {
-                            return 'Please Enter Your Name';
+                            return 'Please Enter Your Password';
                           }
-                        }),
+                        }, 
+                        isPassword: cubit.isPassword,
+                      suffixPressed: () {
+                        cubit.changePasswordVisibility();
+                      },
+                      suffix: cubit.suffix
+                        ),
                     const SizedBox(
                       height: 5,
                     ),
@@ -149,6 +160,7 @@ class SignupScreen extends StatelessWidget {
                             child: Container(
                                 width: 20,
                                 child: Switch(
+                                  activeColor: mainColor,
                                   value: SignupCubit.get(context).switchButton,
                                   onChanged: (value) {
                                     SignupCubit.get(context)
@@ -167,19 +179,29 @@ class SignupScreen extends StatelessWidget {
                     const SizedBox(
                       height: 15,
                     ),
-                    defaultButton(
-                      background: Colors.brown,
-                      function: () {
-                        if (formKey.currentState!.validate()) {
-                          SignupCubit.get(context).signUp(
-                              email: emailController.text,
-                              password: passwordController.text,
-                              name: nameController.text,
-                              phone: phoneController.text,
-                              address: addressController.text);
-                        }
-                      },
-                      text: 'Sign Up',
+                    if(state is SignuploadingState)
+                    Center(child: CircularProgressIndicator(color: mainColor,),)
+                    else
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                          onPressed: cubit.switchButton == false ? null : (){
+                            if (formKey.currentState!.validate()) {
+                              SignupCubit.get(context).signUp(
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                  name: nameController.text,
+                                  phone: phoneController.text,
+                                  address: addressController.text);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(backgroundColor: mainColor),
+                          child: defaultText(
+                              text: 'SIGN UP',
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold)),
                     ),
                     const SizedBox(
                       height: 10,
@@ -195,7 +217,10 @@ class SignupScreen extends StatelessWidget {
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: const Text('Sign In'))
+                            child: Text(
+                              'Sign In',
+                              style: TextStyle(color: mainColor),
+                            )) 
                       ],
                     )
                   ],

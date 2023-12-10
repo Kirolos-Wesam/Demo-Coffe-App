@@ -1,10 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:coffeeapp/layout/HomeScreen/cubit/home_screen_cubit.dart';
+import 'package:coffeeapp/module/FAQScreen/faqscreen.dart';
+import 'package:coffeeapp/module/LoginScreen/loginscreen.dart';
 import 'package:coffeeapp/module/ProfileScreen/cubit/profile_screen_cubit.dart';
+import 'package:coffeeapp/module/orderhistoryscreen/orderhisoryscreen.dart';
 import 'package:coffeeapp/module/paymentScreen/cubit/payment_method_cubit.dart';
 import 'package:coffeeapp/module/paymentScreen/paymentmethodscreen.dart';
 import 'package:coffeeapp/module/profilesettingScreen/profilesettingscreen.dart';
 import 'package:coffeeapp/shared/componets/componets.dart';
+import 'package:coffeeapp/shared/componets/constants.dart';
+import 'package:coffeeapp/shared/network/local/cachehelper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,6 +31,7 @@ class ProfileScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircleAvatar(
+                        backgroundColor: mainColor,
                         radius: 40,
                         backgroundImage: CachedNetworkImageProvider(
                           HomeCubit.get(context).user!.image!,
@@ -101,7 +107,9 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 15,),
                       MaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          navigateTo(context, OrderHistoryScreen());
+                        },
                         minWidth: double.infinity,
                         height: 60,
                         color: Colors.white,
@@ -123,7 +131,9 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 15,),
                       MaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          navigateTo(context, FAQScreen());
+                        },
                         minWidth: double.infinity,
                         height: 60,
                         color: Colors.white,
@@ -143,32 +153,38 @@ class ProfileScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 15,),
-                      MaterialButton(
-                        onPressed: () {},
-                        minWidth: double.infinity,
-                        height: 60,
-                        color: Colors.white,
-                        elevation: 0,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15))),
-                        child: Row(
-                          children: [
-                            Icon(Icons.handshake, color: Colors.grey[700],),
-                            const SizedBox(width: 10,),
-                            defaultText(
-                                text: 'Legal Policy',
-                                color: Colors.black,
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold)
-                          ],
-                        ),
-                      ),
+                      // const SizedBox(height: 15,),
+                      // MaterialButton(
+                      //   onPressed: () {},
+                      //   minWidth: double.infinity,
+                      //   height: 60,
+                      //   color: Colors.white,
+                      //   elevation: 0,
+                      //   shape: const RoundedRectangleBorder(
+                      //       borderRadius:
+                      //           BorderRadius.all(Radius.circular(15))),
+                      //   child: Row(
+                      //     children: [
+                      //       Icon(Icons.handshake, color: Colors.grey[700],),
+                      //       const SizedBox(width: 10,),
+                      //       defaultText(
+                      //           text: 'Legal Policy',
+                      //           color: Colors.black,
+                      //           fontSize: 17,
+                      //           fontWeight: FontWeight.bold)
+                      //     ],
+                      //   ),
+                      // ),
                       Expanded(child: Container()),
                       SizedBox(
                         width: double.infinity,
-                        child: TextButton(onPressed: (){}, child: defaultText(text: 'Log Out', color: mainColor, fontSize: 17, fontWeight: FontWeight.bold)))
+                        child: TextButton(onPressed: (){
+                          CacheHelper.removeData(key: 'uID').then((value) {
+                            navigateAndfinish(context, LoginScreen());
+                            HomeCubit.get(context).user = null;
+                            uID='';
+                          });
+                        }, child: defaultText(text: 'Log Out', color: mainColor, fontSize: 17, fontWeight: FontWeight.bold)))
                     ],
                   ),
           ),

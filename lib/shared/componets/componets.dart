@@ -52,6 +52,7 @@ Widget defaultFormField({
           return validate(s);
         },
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.only(bottom: 5, left: 10),
           filled: true,
           fillColor: Colors.grey[200],
           labelText: label,

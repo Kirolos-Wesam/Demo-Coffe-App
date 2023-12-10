@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:coffeeapp/layout/HomeScreen/cubit/home_screen_cubit.dart';
 import 'package:coffeeapp/model/productmodel.dart';
 import 'package:coffeeapp/module/OrderScreen/cubit/order_screen_cubit.dart';
 import 'package:coffeeapp/module/ProductScreen/cubit/products_screen_cubit.dart';
@@ -26,7 +27,7 @@ class ProductScreen extends StatelessWidget {
       },
       builder: (context, state) {
         var cubit = ProductsCubit.get(context);
-        List<ProductModel> fillterdProduct = cubit.products.where((element) {
+        List<ProductModel> filteredProduct = cubit.products.where((element) {
           if (cubit.currentIndex == 0) {
             return element.categoryId == 1;
           } else if (cubit.currentIndex == 1) {
@@ -70,23 +71,36 @@ class ProductScreen extends StatelessWidget {
                                           Icons.notifications_none,
                                           color: Colors.white,
                                         )),
-                                    const Text(
-                                      'Kirolos Wesam',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    const CircleAvatar(
-                                      radius: 25,
-                                      backgroundColor: Colors.orange,
-                                    )
+                                     if(HomeCubit.get(context).user != null)   
+                                     InkWell(
+                                      onTap: (){
+                                        HomeCubit.get(context).changeNavBottom(3);
+                                      },
+                                       child: Text(
+                                        HomeCubit.get(context).user!.name! ,
+                                        style: TextStyle(color: Colors.white),
+                                                                           ),
+                                     ),
+                                    if(HomeCubit.get(context).user != null) 
+                                     InkWell(
+                                      onTap: (){
+                                        HomeCubit.get(context).changeNavBottom(3);
+                                      },
+                                       child: CircleAvatar(
+                                        radius: 25,
+                                        backgroundImage: CachedNetworkImageProvider(HomeCubit.get(context).user!.image!),
+                                                                           ),
+                                     )
                                   ],
                                 ),
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                const Padding(
+                                if(HomeCubit.get(context).user != null) 
+                                 Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
-                                    'Good Moring, Kirolos',
+                                    'Hello, ${HomeCubit.get(context).user!.name!.split(' ').first} ',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 20,
@@ -245,7 +259,7 @@ class ProductScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if(fillterdProduct.isEmpty)
+                    if(filteredProduct.isEmpty)
                     const Padding(
                       padding: EdgeInsets.only(top: 100),
                       child: Center(child: CircularProgressIndicator()),
@@ -260,7 +274,7 @@ class ProductScreen extends StatelessWidget {
                           crossAxisSpacing: 9,
                           mainAxisSpacing: 14,
                           childAspectRatio: .79,
-                          children: List.generate(fillterdProduct.length, (index) => products(fillterdProduct,index, context)),
+                          children: List.generate(filteredProduct.length, (index) => products(filteredProduct,index, context)),
                         ))
                   ],
                 ),

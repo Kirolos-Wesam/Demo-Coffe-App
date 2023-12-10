@@ -1,8 +1,10 @@
 import 'package:coffeeapp/module/orderhistoryscreen/cubit/order_history_cubit.dart';
+import 'package:coffeeapp/module/orderhistoryscreen/orderproductshistory.dart';
 import 'package:coffeeapp/shared/componets/componets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class OrderHistoryScreen extends StatelessWidget {
   const OrderHistoryScreen({super.key});
@@ -45,33 +47,41 @@ class OrderHistoryScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      if(cubit.carts == null)
+                      if(cubit.checkOuts == null)
                       LinearProgressIndicator(minHeight: 2, backgroundColor: mainColor,)
                       else
-                      ListView.separated(itemBuilder: (context, index){
-                        return Container(
-                        width: double.infinity,
-                        height: 150,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: Colors.white),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                            Row(
+                      ListView.separated(
+                        shrinkWrap: true,
+                        itemBuilder: (context, index){
+                        return InkWell(
+                          onTap: (){
+                            cubit.getProductsOrder(historyId: cubit.checkOuts![index].id!);
+                            navigateTo(context, const OrderProductsHistoryScreen());
+                          },
+                          child: Container(
+                          width: double.infinity,
+                          height: 150,
+                          decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: Colors.white),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                defaultText(text: 'Date:', color: Colors.black, fontSize: 17, fontWeight: FontWeight.bold),
-                                SizedBox(width: 5,),
-                                defaultText(text: 'Date:', color: Colors.black, fontSize: 15)
-                              ],
-                            ),
-                            Spacer(),
-                            defaultText(text: '50 EGP', color: Colors.black)
-                          ]),
-                        ),
-                      );
+                              Row(
+                                children: [
+                                  defaultText(text: 'Date:', color: Colors.black, fontSize: 17, fontWeight: FontWeight.bold),
+                                  const SizedBox(width: 5,),
+                                  defaultText(text:  DateFormat.yMEd().add_jms().format(cubit.checkOuts![index].date!),color: Colors.black, fontSize: 15)
+                                ],
+                              ),
+                              const Spacer(),
+                              defaultText(text: '${cubit.checkOuts![index].price} EGP', color: Colors.black, fontWeight: FontWeight.bold)
+                            ]),
+                          ),
+                                                ),
+                        );
                       }
-                      , separatorBuilder: (context, index) => SizedBox(height: 10,), itemCount: cubit.carts!.length)
+                      , separatorBuilder: (context, index) => const SizedBox(height: 10,), itemCount: cubit.checkOuts!.length)
                       
                     ],
                   ),

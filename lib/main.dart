@@ -1,21 +1,18 @@
 import 'package:coffeeapp/layout/HomeScreen/cubit/home_screen_cubit.dart';
 import 'package:coffeeapp/layout/HomeScreen/homeScreen.dart';
+import 'package:coffeeapp/module/FAQScreen/cubit/faq_cubit.dart';
 import 'package:coffeeapp/module/FavouriteScreen/cubit/favourtie_screen_cubit.dart';
 import 'package:coffeeapp/module/LoginScreen/cubit/cubit.dart';
 import 'package:coffeeapp/module/LoginScreen/loginscreen.dart';
 import 'package:coffeeapp/module/OrderScreen/cubit/order_screen_cubit.dart';
 import 'package:coffeeapp/module/ProductScreen/cubit/products_screen_cubit.dart';
-import 'package:coffeeapp/module/ProductScreen/productsScreen.dart';
 import 'package:coffeeapp/module/ProfileScreen/cubit/profile_screen_cubit.dart';
 import 'package:coffeeapp/module/SignupScreen/cubit/cubit.dart';
+import 'package:coffeeapp/module/onboardScreen/onboardscreen.dart';
 import 'package:coffeeapp/module/orderhistoryscreen/cubit/order_history_cubit.dart';
-import 'package:coffeeapp/module/orderhistoryscreen/orderhisoryscreen.dart';
 import 'package:coffeeapp/module/paymentScreen/cubit/payment_method_cubit.dart';
-import 'package:coffeeapp/module/paymentScreen/paymentmethodscreen.dart';
 import 'package:coffeeapp/module/productInfoScreen/cubit/product_info_cubit.dart';
-import 'package:coffeeapp/module/productInfoScreen/productinfoscreen.dart';
 import 'package:coffeeapp/module/profilesettingScreen/cubit/profile_setting_cubit.dart';
-import 'package:coffeeapp/module/profilesettingScreen/profilesettingscreen.dart';
 import 'package:coffeeapp/shared/componets/constants.dart';
 import 'package:coffeeapp/shared/network/local/cachehelper.dart';
 import 'package:coffeeapp/shared/styles/theme.dart';
@@ -31,13 +28,18 @@ void main() async{
   Bloc.observer = MyBlocObserver();
   Widget? widget;
 
+ if(CacheHelper.getData(key: 'onBoard') == true){
   if(CacheHelper.getData(key: 'uID') != null){
     uID = CacheHelper.getData(key: 'uID');
-    print(uID);
-    widget = HomeScreen();
+    widget = const HomeScreen();
   }
-  else
-  widget = LoginScreen();
+  else{
+    widget = LoginScreen();
+  }
+ }
+ else{
+ widget = const OnboardScreen();
+ }
 
   runApp(MyApp(startWidget: widget,));
 }
@@ -66,13 +68,14 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context)=> ProductInfoCubit()),
         BlocProvider(create: (context)=> ProfileSettingCubit()),
         BlocProvider(create: (context)=> PaymentMethodCubit()),
-        BlocProvider(create: (context)=> OrderHistoryCubit()),
+        BlocProvider(create: (context)=> FaqCubit()),
+        BlocProvider(create: (context)=> OrderHistoryCubit()..getOrdersHistory()),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Coffee App',
         debugShowCheckedModeBanner: false,
         theme: light,
-        home: OrderHistoryScreen()
+        home: startWidget
       ),
     );
   }

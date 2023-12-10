@@ -10,3 +10,9 @@ final class GetOrderHistoryLoadingState extends OrderHistoryState {}
 final class GetOrderHistorySuccessState extends OrderHistoryState {}
 
 final class GetOrderHistoryErrorState extends OrderHistoryState {}
+
+final class GetProductsOrderHistoryLoadingState extends OrderHistoryState {}
+
+final class GetProductsOrderHistorySuccessState extends OrderHistoryState {}
+
+final class GetProductsOrderHistoryErrorState extends OrderHistoryState {}

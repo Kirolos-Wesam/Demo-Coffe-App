@@ -8,6 +8,7 @@ import 'package:coffeeapp/shared/network/local/cachehelper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
   var emailController = TextEditingController();
@@ -28,11 +29,12 @@ class LoginScreen extends StatelessWidget {
             CacheHelper.saveData(key: 'uID', value: state.uID).then((value) {
               print(CacheHelper.getData(key: 'uID'));
               uID = state.uID;
-              navigateAndfinish(context, HomeScreen());
+              navigateAndfinish(context, const HomeScreen());
               print(value);
             });
+          }else{
+          navigateAndfinish(context, const HomeScreen());
           }
-          navigateAndfinish(context, HomeScreen());
         }
       },
       builder: (context, state) {
@@ -96,6 +98,7 @@ class LoginScreen extends StatelessWidget {
                           child: Container(
                               width: 20,
                               child: Switch(
+                                activeColor: mainColor,
                                 value: LoginCubit.get(context).switchButton,
                                 onChanged: (value) {
                                   LoginCubit.get(context)
@@ -112,20 +115,24 @@ class LoginScreen extends StatelessWidget {
                       const Spacer(),
                       TextButton(
                           onPressed: () {},
-                          child: const Text('Forget Password ?'))
+                          child:  Text('Forget Password ?', style: TextStyle(color: mainColor),))
                     ],
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  defaultButton(
-                      function: () {
-                        LoginCubit.get(context).signIn(
-                            email: emailController.text,
-                            password: passwordController.text);
-                      },
-                      text: 'Sign in',
-                      background: Colors.brown),
+                  if(state is LoginLoadingState)
+                  Center(child: CircularProgressIndicator(color: mainColor,),)
+                  else
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: mainColor),
+                      onPressed: (){
+                        LoginCubit.get(context).signIn(email: emailController.text
+                        , password: passwordController.text);
+                      }, child: defaultText(text: 'SIGN IN', color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16 ),)),
                   const SizedBox(
                     height: 60,
                   ),
@@ -147,9 +154,9 @@ class LoginScreen extends StatelessWidget {
                           onPressed: () {
                             navigateTo(context, SignupScreen());
                           },
-                          child: const Text(
+                          child:  Text(
                             'Sign Up',
-                            style: TextStyle(fontSize: 15),
+                            style: TextStyle(fontSize: 15, color: mainColor),
                           ))
                     ],
                   )

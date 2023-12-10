@@ -27,7 +27,8 @@ class UserModel{
     return{
       'name':name,
       'email':email,
-      'UID':phone,
+      'UID':uID,
+      'phone': phone,
       'address': address,
       'image': image
     };

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-List<CheckOutModel> productIdModelFromJson(List<QueryDocumentSnapshot> list) =>
+List<CheckOutModel> checkOutModelFromJson(List<QueryDocumentSnapshot> list) =>
     List<CheckOutModel>.from(list
         .map((x) => CheckOutModel.fromJson(x.data() as Map<String, dynamic>)));
 
@@ -17,7 +17,7 @@ class CheckOutModel {
   CheckOutModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     price = json['price'];
-    date = json['date'];
+    date = (json['date'] as Timestamp).toDate();
   }
 
   Map<String, dynamic> toMap() {
