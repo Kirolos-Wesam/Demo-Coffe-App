@@ -13,21 +13,51 @@ import 'package:coffeeapp/module/orderhistoryscreen/cubit/order_history_cubit.da
 import 'package:coffeeapp/module/paymentScreen/cubit/payment_method_cubit.dart';
 import 'package:coffeeapp/module/productInfoScreen/cubit/product_info_cubit.dart';
 import 'package:coffeeapp/module/profilesettingScreen/cubit/profile_setting_cubit.dart';
+import 'package:coffeeapp/shared/componets/componets.dart';
 import 'package:coffeeapp/shared/componets/constants.dart';
 import 'package:coffeeapp/shared/network/local/cachehelper.dart';
 import 'package:coffeeapp/shared/styles/theme.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'firebase_options.dart';
 
+
+getToken() async{
+  var token =  await FirebaseMessaging.instance.getToken();
+  print('-----------------------------------this is token msg -------------------------');
+  print(token);
+}
+
+Future backgroundMessage(RemoteMessage message)async{
+    print('===========================');
+    print(message.notification!.title);
+    print(message.notification!.body);
+    print('===========================');
+}
+
+
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+  getToken();
   await CacheHelper.init();
   Bloc.observer = MyBlocObserver();
   Widget? widget;
 
+  FirebaseMessaging.onBackgroundMessage(backgroundMessage);
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('======================================');
+    print(message.notification!.title);
+    print(message.notification!.body);
+    print('======================================');
+
+   });
+
+  
  if(CacheHelper.getData(key: 'onBoard') == true){
   if(CacheHelper.getData(key: 'uID') != null){
     uID = CacheHelper.getData(key: 'uID');
